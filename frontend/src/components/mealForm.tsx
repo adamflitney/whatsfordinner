@@ -3,8 +3,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
 import { useForm } from "@tanstack/react-form";
 import { api } from "@/lib/api";
+import { useNavigate } from "@tanstack/react-router";
 
 export const MealForm: React.FC = () => {
+  const navigate = useNavigate();
   const mealForm = useForm({
     defaultValues: {
       name: "",
@@ -15,6 +17,7 @@ export const MealForm: React.FC = () => {
     onSubmit: (data) => {
       console.log(data);
       api.meals.$post({ json: data.value });
+      navigate({to: "/meals"});
     },
   });
 
@@ -90,9 +93,9 @@ export const MealForm: React.FC = () => {
                 <Input
                   id={field.name}
                   name={field.name}
-                  value={field.state.value}
+                  value={field.state.value.toString()}
                   onBlur={field.handleBlur}
-                  onChange={(e) => field.handleChange(e.target.value)}
+                  onChange={(e) => field.handleChange(e.target.value.split(","))}
                 />
                 {field.state.meta.isTouched && field.state.meta.errors.length
                   ? <em>{field.state.meta.errors.join(", ")}</em>
@@ -122,9 +125,9 @@ export const MealForm: React.FC = () => {
                 <Input
                   id={field.name}
                   name={field.name}
-                  value={field.state.value}
+                  value={field.state.value.toString()}
                   onBlur={field.handleBlur}
-                  onChange={(e) => field.handleChange(e.target.value)}
+                  onChange={(e) => field.handleChange(e.target.value.split(","))}
                 />
                 {field.state.meta.isTouched && field.state.meta.errors.length
                   ? <em>{field.state.meta.errors.join(", ")}</em>

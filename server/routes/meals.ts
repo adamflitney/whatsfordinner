@@ -13,7 +13,11 @@ const mealSchema = z.object({
 
 type Meal = z.infer<typeof mealSchema>
 
-const createMealSchema = mealSchema.omit({id: true})
+const createMealSchema = mealSchema.omit({id: true}).transform((data) => {
+    return {...data, ingredients: z.string().parse(), tags: z.string()}
+});
+
+type CreateMeal = z.infer<typeof createMealSchema>
 
 const fakeMeals: Meal[] = [
     {id: 1, name: 'Nachos', ingredients: ['cheese', 'doritos', 'salsa', 'guacamole', 'sour cream', 'chicken'], tags: ['mexican, main'], cost: 'medium'},
@@ -31,7 +35,8 @@ export const mealsRoute = new Hono()
     return c.json({meals: fakeMeals})
 })
 .post('/', zValidator("json", createMealSchema), async (c) => {
-    const meal = await c.req.valid("json")
+    const mealInput: CreateMeal = await c.req.valid("json")
+    const meal: Meal = {...mealInput, ingredients: mealInput.ingredients.transform((data) => data.split(',')), tags: mealInput.tags.transform((data) => data.split(','))}
     fakeMeals.push({id: fakeMeals.length + 1, ...meal})
     c.status(201)
     return c.json({message: 'Meal created', meal})
