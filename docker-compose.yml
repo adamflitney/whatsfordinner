@@ -10,10 +10,9 @@ services:
     environment:
       POSTGRES_USER: wfduser
       POSTGRES_PASSWORD: wfduser
-      POSTGRES_DB: postgres
+      POSTGRES_DB: wfd
     volumes:
       - postgres_data:/var/lib/postgresql@16/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "5433:5432"
 
