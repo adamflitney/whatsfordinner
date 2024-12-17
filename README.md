@@ -19,4 +19,4 @@ This project was created using `bun init` in bun v1.1.34. [Bun](https://bun.sh) 
 fuser -k 3000/tcp
 
 # connect directly to the postgres instance
-sudo docker exec -it postgres_wfd psql -U wfduser postgres
+sudo docker exec -it postgres_wfd psql -U wfduser wfd
